@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+option csharp_namespace = "gameofwords.service";
+
+import "common.proto";
+import "google/protobuf/timestamp.proto";
+
+service AuthService {
+  rpc Login (LoginRequest) returns (LoginResponse);
+  rpc Logout (gameofwords.common.DataRequest) returns (gameofwords.common.BoolResponse);
+  rpc SessionsList (gameofwords.common.DataRequest) returns (SessionsListResponse);
+  rpc Check (gameofwords.common.DataRequest) returns (gameofwords.common.BoolResponse);
+  rpc CheckAdmin (gameofwords.common.DataRequest) returns (gameofwords.common.BoolResponse);
+  rpc GetCurrentUserLogin (gameofwords.common.DataRequest) returns (gameofwords.common.StringResponse);
+  rpc GetCurrentUserId (gameofwords.common.DataRequest) returns (gameofwords.common.IdResponse);
+  rpc CheckVK (gameofwords.common.StringRequest) returns (LoginResponse);
+  rpc CheckGoogle (gameofwords.common.StringRequest) returns (LoginResponse);
+  rpc BotLogin (gameofwords.common.IdRequest) returns (LoginResponse);
+}
+
+message LoginRequest {
+  string login = 1;
+  string password = 2;
+}
+
+message LoginResponse {
+  string SessionId = 1;
+  gameofwords.common.Error Error = 2;
+}
+
+message SessionsListResponse {
+  repeated SessionsListItem data = 1;
+  gameofwords.common.Error Error = 2;
+}
+
+message SessionsListItem {
+  string SessionId = 1;
+  int32 UserId = 2;
+  google.protobuf.Timestamp DateTime = 3;
+}

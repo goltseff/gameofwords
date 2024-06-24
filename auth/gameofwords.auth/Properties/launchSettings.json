@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "gameofwords.auth": {
+      "commandName": "Project",
+      "commandLineArgs": "../../config/config.yaml",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5132"
+    }
+  }
+}

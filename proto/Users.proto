@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+option csharp_namespace = "gameofwords.service";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+service UsersService {
+  rpc GetUser (gameofwords.common.IdRequest) returns (UserResponse);
+  rpc GetUsersList (UsersListRequest) returns (UsersListResponse);
+  rpc GetUsersListCount (UsersListRequest) returns (gameofwords.common.IdResponse);
+  rpc CreateUser (UserRequest) returns (gameofwords.common.IdResponse);
+  rpc UpdateUser (UserRequest) returns (gameofwords.common.BoolResponse);
+  rpc DeleteUser (gameofwords.common.IdRequest) returns (gameofwords.common.BoolResponse);
+  rpc GetUserHistory (gameofwords.common.IdRequest) returns (UserHistoryResponse);
+  rpc GetUserProfile (gameofwords.common.DataRequest) returns (UserResponse);
+  rpc UpdateUserPassword (UserPasswordRequest) returns (gameofwords.common.BoolResponse);
+}
+
+
+message UsersListRequest{
+	int32 skip = 1;
+	int32 take = 2;
+	repeated string filters = 3;
+	repeated string values = 4;
+}
+
+message UsersListItem{
+	int32 id = 1;
+	string login = 2;
+	string nickName = 3;
+	string email = 4;
+	bool isAdmin = 5;
+	bool isBot = 6;
+	string updatedBy = 7;
+}
+
+message UsersListResponse{
+  repeated UsersListItem data = 1;
+}
+
+message UserResponse{
+  UsersListItem data = 1;
+  gameofwords.common.Error error = 2;
+}
+
+message UserRequest
+{
+	string password = 1;
+	string login = 2;
+	string nickName = 3;
+	string email = 4;
+	bool isAdmin = 5;
+	bool isBot = 6;
+	google.protobuf.Int32Value Id = 7;
+	gameofwords.common.DataRequest context = 8;
+}
+
+message UserPasswordRequest
+{
+	string password = 1;
+	google.protobuf.Int32Value Id = 2;
+	gameofwords.common.DataRequest context = 3;
+}
+
+
+message UserHistoryItem{
+	string action = 1;
+	string message = 2;
+	google.protobuf.Timestamp datetime = 3;
+	string who = 4;
+}
+
+message UserHistoryResponse{
+  repeated UserHistoryItem data = 1;
+}

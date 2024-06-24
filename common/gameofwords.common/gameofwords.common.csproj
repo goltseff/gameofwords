@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<Protobuf Include="..\..\proto\Common.proto" GrpcService="None" />
+		<Protobuf Include="..\..\proto\Auth.proto" />
+		<Protobuf Include="..\..\proto\Users.proto" />
+		<Protobuf Include="..\..\proto\Game.proto" />
+	</ItemGroup>
+
+
+
+	<ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.63.0" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.63.0" />
+    <PackageReference Include="Grpc.Tools" Version="2.64.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Nito.AsyncEx.Coordination" Version="5.1.2" />
+    <PackageReference Include="YamlDotNet" Version="15.1.6" />
+  </ItemGroup>
+
+</Project>

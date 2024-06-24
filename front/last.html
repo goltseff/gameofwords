@@ -1,0 +1,64 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>game of words</title>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+<script src = "js/common.js">  </script>
+<script src = "js/game.js">  </script>
+<script>
+$(document).ready(function () {
+	checkIsAuth();
+});
+
+async function checkIsAuth(){
+	let result = await checkAuth();
+	if (result) {
+				$('#cnt_wait_auth').hide();
+				$('#cnt_with_auth').show();
+				fillLastGames();
+		}else{
+				window.location = 'index.html';
+		}
+}
+
+</script>  
+<link rel="stylesheet" href="style.css"/>
+</head>
+<div id="cnt_wait_auth">выполняется проверка аутентификации</div>
+<div id="cnt_with_auth" style="display:none">
+<div style="width:99%;">
+<table border=0 width=100%>
+ <tr>
+ <td width=50% align=left>
+ <a href="index.html">Главная</a>
+ :: <a href="top.html">Лидеры</a>
+ :: <b>Последние игры</b>
+<span class="only_admin" style="display:none"> :: <a href="users.html">Пользователи</a></span>
+ </td>
+ <td width=50% align=right>
+ привет, <span id="user_nickname" style="font-weight:bold"></span> <input type="button" value="Выйти" onclick="doLogout()">
+ </td>
+</table> 
+</div>
+
+<h3>Последние игры</h3>
+<table id="games_table" border="1" width="1000px" style="border:1px solid black;border-collapse:collapse">
+	<tr>
+		<th>Игрок</th>
+		<th>Слово</th>
+		<th>Сложность</th>
+		<th>Дата</th>
+		<th>Кол-во слов</th>
+		<th>Закончено</th>
+		<th>Победа</th>
+		<th>Продолжить</th>
+	</tr>
+</table>
+
+<br><br><br><br><br>
+
+</div>
+</html>

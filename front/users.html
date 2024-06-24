@@ -1,0 +1,141 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>game of words</title>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+<script src = "js/common.js">  </script>
+<script src = "js/users.js">  </script>
+<script>
+$(document).ready(function () {
+	checkIsAuth();
+});
+
+
+async function checkIsAuth(){
+	let result = await checkAuth();
+	if (result) {
+				$('#cnt_wait_auth').hide();
+				$('#cnt_no_auth').hide();
+				$('#cnt_with_auth').show();
+				fillUsers(1);
+				fillUsersPages();
+		}else{
+			window.location = 'index.html';
+		}
+}
+
+</script>  
+<link rel="stylesheet" href="style.css"/>
+</head>
+<div id="cnt_wait_auth">выполняется проверка аутентификации</div>
+<div id="cnt_with_auth" style="display:none">
+<div style="width:99%;">
+<table border=0 width=100%>
+ <tr>
+ <td width=50% align=left>
+ <a href="index.html">Главная</a>
+ :: <a href="top.html">Лидеры</a>
+ :: <a href="last.html">Последние игры</a>
+<span class="only_admin" style="display:none"> :: <b>Пользователи</b></span>
+ </td>
+ <td width=50% align=right>
+ привет, <span id="user_nickname" style="font-weight:bold"></span> <input type="button" value="Выйти" onclick="doLogout()">
+ </td>
+</table> 
+</div>
+<h1>Администрирование пользователей</h1>
+<input type=button value="Добавить нового пользователя" onclick="showAddUserForm()">
+
+<h3>Список пользователей</h3>
+<table id="users_table" border="1" width="600px" style="border:1px solid black;border-collapse:collapse">
+	<tr>
+		<th>id</th>
+		<th>login</th>
+		<th>nickname</th>
+		<th>email</th>
+		<th>admin</th>
+		<th>bot</th>
+		<th>history</th>
+		<th>edit</th>
+		<th>delete</th>
+	</tr>
+</table>
+<div id="cnt_pages"></div>
+</div>
+
+
+<div id="user_history" class="modal_form">
+	<h3>История изменений пользователя #<b><span id="user_span_id"></span></b></h3>
+	<table id="history_table" border="1" width="300px" style="border:1px solid black;border-collapse:collapse" align="center">
+		<tr>
+			<th>action</th>
+			<th>message</th>
+			<th>date</th>
+			<th>who</th>
+		</tr>
+	</table>
+	<div style="width:100%; text-align:center; padding-top:10px"><input type=button value="Закрыть" onClick="closeModal()"></div>
+</div>
+
+
+<div id="user_add" class="modal_form">
+	<table border="1" width="300px" style="border:1px solid black;border-collapse:collapse; margin-top:20px" align="center">
+		<tr>
+			<th colspan=2 align=center id="user_add_table_header">Добавить нового пользователя</th>
+		</tr>
+		<tr>
+			<td>login</td>
+			<td><input type=text id="user_form_login" class="user_add_input" value=""><input type=hidden id="user_form_id"></td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td><input type=password id="user_form_password" class="user_add_input" value=""></td>
+		</tr>
+		<tr>
+			<td>nickname</td>
+			<td><input type=text id="user_form_nickname" class="user_add_input" value=""></td>
+		</tr>
+		<tr>
+			<td>email</td>
+			<td><input type=text id="user_form_email" class="user_add_input" value=""></td>
+		</tr>
+		<tr>
+			<td>admin</td>
+			<td><input type=checkbox id="user_form_isadmin" class="user_add_input"></td>
+		</tr>
+		<tr>
+			<td>bot</td>
+			<td><input type=checkbox id="user_form_isbot" class="user_add_input"></td>
+		</tr>
+	</table>
+	<div style="width:100%; text-align:center; padding-top:10px">
+		<input type=button value="Редактировать" onClick="editUser()" id="user_form_edit_button"> 
+		<input type=button value="Добавить" onClick="addUser()" id="user_form_add_button"> 
+		<input type=button value="Закрыть" onClick="closeModal()">
+	</div>
+	<div id="password_form">
+	<table border="1" width="300px" style="border:1px solid black;border-collapse:collapse; margin-top:20px" align="center">
+		<tr>
+			<th colspan=2 align=center id="user_add_table_header">Поменять пользователю пароль</td>
+		</tr>
+		<tr>
+			<td>password</td>
+			<td><input type=password id="user_form_newpassword" class="user_add_input" value=""></td>
+		</tr>
+	</table>
+	<div style="width:100%; text-align:center; padding-top:10px">
+		<input type=button value="Поменять" onClick="editPassword()"> 
+		<input type=button value="Закрыть" onClick="closeModal()">
+	</div>
+	</div>
+</div>
+
+<div id="wait" class="modal_form" style="text-align:center;">
+загрузка...
+</div>
+
+<div id="shadow" class="shadow"></div>
+</html>

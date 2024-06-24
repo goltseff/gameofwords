@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package gameofwords.common;
+
+
+message NoData { }
+
+message DataRequest {
+    string sessionId = 1;
+}
+
+message Error {
+    int32 code = 1;
+    string message = 2;
+}
+
+message IdRequest {
+    DataRequest context = 1;
+    int32 id = 2;
+}
+
+message StringRequest {
+    DataRequest context = 1;
+    string data = 2;
+}
+
+message IdResponse {
+    Error error = 1;
+    int32 data = 2;
+}
+
+message BoolResponse {
+    Error error = 1;
+    bool data = 2;
+}
+
+message StringResponse {
+    Error error = 1;
+    string data = 2;
+}

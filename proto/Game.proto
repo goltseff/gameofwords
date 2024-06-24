@@ -1,0 +1,134 @@
+syntax = "proto3";
+
+option csharp_namespace = "gameofwords.service";
+
+import "google/protobuf/wrappers.proto";
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+service GameService {
+  rpc CreateGame (CreateGameRequest) returns (GameResponse);
+  rpc GameMove (GameMoveRequest) returns (GameMoveResponse);
+  rpc WordInfo (gameofwords.common.IdRequest) returns (WordResponse);
+  rpc GameInfo (gameofwords.common.IdRequest) returns (GameInfoResponse);
+  rpc GiveUp (gameofwords.common.IdRequest) returns (gameofwords.common.BoolResponse);
+  rpc GetCurrentUserGamesList (GamesListRequest) returns (GamesListResponse);
+  rpc GetCurrentUserGamesListCount (GamesListRequest) returns (gameofwords.common.IdResponse);
+  rpc DifficultyList (gameofwords.common.DataRequest) returns (DifficultyListResponse);
+  rpc GetLastGamesList (gameofwords.common.DataRequest) returns (GamesListResponse);
+  rpc TopGames (gameofwords.common.DataRequest) returns (TopResponse);
+  rpc TopWins (gameofwords.common.DataRequest) returns (TopResponse);
+  rpc TopPercent (gameofwords.common.DataRequest) returns (TopResponse);
+  rpc TopWords (gameofwords.common.DataRequest) returns (TopResponse);
+  rpc TopContainsWords (gameofwords.common.DataRequest) returns (TopResponse);
+}
+
+message TopResponse{
+	repeated TopResponseItem data = 1;
+}
+
+message TopResponseItem{
+	string name=1;
+	int32 value =2;
+	string description=3;
+}
+
+message DifficultyListResponse
+{
+	repeated DifficultyListItem data = 1;
+}
+
+message DifficultyListItem
+{
+	int32 id=1;
+	string name=2;
+}
+
+message GamesListResponse{
+  repeated GamesListItem data = 1;
+}
+
+message GamesListItem{
+	int32 id = 1;
+	int32 wordId = 2;
+	string word = 3;
+	string difficulty = 4;
+	int32 countWords = 5;
+	google.protobuf.Timestamp createDate = 6;
+	bool isFinished = 7;
+	bool isUserWin = 8;
+	bool canConinue = 9;
+	string wordDescription=10;
+	string userNickName=11;
+}
+
+
+message GamesListRequest{
+	int32 skip = 1;
+	int32 take = 2;
+	repeated string filters = 3;
+	repeated string values = 4;
+	gameofwords.common.DataRequest context = 5;
+}
+
+message CreateGameRequest
+{
+	int32 wordLength = 1;
+	int32 difficulty = 2;
+	gameofwords.common.DataRequest context = 3;
+}
+
+message GameResponse
+{
+	int32 gameId = 1;
+	int32 wordId = 2;
+	string word = 3;
+	gameofwords.common.Error error = 4;
+}
+
+message GameMoveResponse
+{
+	int32 wordId = 1;
+	string word = 2;
+	bool gameEnd=3;
+	gameofwords.common.Error error = 4;
+	string wordDescription=5;
+}
+
+message GameMoveRequest
+{
+	string word = 1;
+	int32 gameId = 2;
+	gameofwords.common.DataRequest context = 3;
+}
+
+message WordResponse
+{
+	string name = 1;
+	string description = 2;
+}
+
+message GameInfoResponse
+{
+	string word = 1;
+	int32 wordId = 2;
+	string difficulty = 3;
+	bool isFinished = 4;
+	int32 userId = 5;
+	string userNickName = 6;
+	bool isUserWin = 7;
+	google.protobuf.Timestamp createDate = 8;
+	repeated GameMoveItem moves = 9; 
+	gameofwords.common.Error error = 10;
+	bool canConinue = 11;
+	string wordDescription = 12;
+}
+
+message GameMoveItem
+{
+	string word = 1;
+	int32 wordId = 2;
+	bool isFromUser = 3;
+	google.protobuf.Timestamp createDate = 4;
+	string wordDescription=5;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>auth google</title>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+<script src = "js/common.js">  </script>
+  
+<script>
+$(document).ready(function () {
+	const params = new Proxy(new URLSearchParams(window.location.search), {
+	  get: (searchParams, prop) => searchParams.get(prop),
+	});
+	let code = params.code;
+
+	let requestData = {
+		code: params.code
+	}
+	$.ajax({
+		'url': apiPref + 'auth/check-google',
+		contentType: 'application/json',
+		type: 'POST',
+		data: JSON.stringify(requestData),
+		success: function (response) {
+			window.location = 'index.html';
+		},
+		error: function(xhr, status, error) {
+			alert(xhr.responseText);
+		}
+	});
+	
+});
+
+</script>  
+</head>
+<body>
+загрузка...
+</body>
+</html>

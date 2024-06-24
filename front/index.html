@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>game of words</title>
+<script
+  src="https://code.jquery.com/jquery-3.7.1.min.js"
+  integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+  crossorigin="anonymous"></script>
+  
+<script src = "js/common.js">  </script>
+<script src = "js/game.js">  </script>
+<script>
+$(document).ready(function () {
+	checkIsAuth();
+});
+
+async function checkIsAuth(){
+	let result = await checkAuth();
+	if (result) {
+				$('#cnt_wait_auth').hide();
+				$('#cnt_no_auth').hide();
+				$('#cnt_with_auth').show();
+				fillWordLength();
+				fillDifficulty();
+				fillOldGames(1);
+				fillGamesPages();
+		}else{
+				$('#cnt_wait_auth').hide();
+				$('#cnt_with_auth').hide();
+				$('#cnt_no_auth').show();
+		}
+}
+
+
+function doLogin() {
+	let loginData = {
+		login: $('#login').val(),
+		password: $('#password').val()
+	}
+
+	$.ajax({
+		'url': apiPref + 'auth/login',
+		contentType: 'application/json',
+		type: 'POST',
+		data: JSON.stringify(loginData),
+		success: function () {
+			window.location.reload();
+		},
+		error: function () {
+				alert('логин или пароль неверные');
+		}
+	});
+}
+
+
+
+</script>  
+<link rel="stylesheet" href="style.css"/>
+</head>
+<div id="cnt_wait_auth">выполняется проверка аутентификации</div>
+<div id="cnt_no_auth" style="width:100%; height:100%;display:none">
+        <table border="1" width="300px" style="border:1px solid black;border-collapse:collapse" align="center">
+            <tr>
+                <td>Логин</td>
+                <td><input type="text" id="login"></td>
+            </tr>
+            <tr>
+                <td>Пароль</td>
+                <td><input type="password" id="password"></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center">
+				<input type="button" value="Войти" onclick="doLogin()">
+				<br><input style="margin-top:10px" type="button" value="Войти через VK" onclick="document.location='https://oauth.vk.com/authorize?client_id=51955194&display=page&redirect_uri=http://localhost/authvk.html&response_type=code&v=5.199'">
+				<br><input style="margin-top:10px" type="button" value="Войти через Google" onclick="document.location='https://accounts.google.com/o/oauth2/auth?client_id=1085072176287-1hgqk0e8tek0jq3ck60o9afl51kvpvhh.apps.googleusercontent.com&redirect_uri=http://localhost/authg.html&response_type=code&state=123&scope=https://www.googleapis.com/auth/userinfo.profile'">
+				</td>
+            </tr>
+        </table>
+</div>
+<div id="cnt_with_auth" style="display:none">
+<div style="width:99%;">
+<table border=0 width=100%>
+ <tr>
+ <td width=50% align=left>
+ <b>Главная</b>
+ :: <a href="top.html">Лидеры</a>
+ :: <a href="last.html">Последние игры</a>
+<span class="only_admin" style="display:none"> :: <a href="users.html">Пользователи</a></span>
+ </td>
+ <td width=50% align=right>
+ привет, <span id="user_nickname" style="font-weight:bold"></span> <input type="button" value="Выйти" onclick="doLogout()">
+ </td>
+</table> 
+</div>
+<h1>game of words</h1>
+<h3>Правила игры</h3>
+<ul>
+<li>За основу взята игра финального раунда телепередачи "Звёздный час"
+<li>Вы соревнуетесь с компьютером
+<li>Из одного большого слова нужно составить как можно больше маленьких слов
+<li>Слова должны быть существительными в единственном числе и состоять минимум из трех букв
+<li>У кого раньше закончатся слова - тот проиграл
+<li>Чем выше сложность игры - тем больше компьютер сможет подобрать слов
+</ul>
+	<table border="1" width="300px" style="border:1px solid black;border-collapse:collapse; margin-top:20px" >
+		<tr>
+			<th colspan=2 align=center id="user_add_table_header">Начать новую игру</th>
+		</tr>
+		<tr>
+			<td>Сложность</th>
+			<td><select id=difficulty><option value="0">загрузка</select></td>
+		</tr>
+		<tr>
+			<td>Длина слова</th>
+			<td><select id=word_length><option value="0">загрузка</select></td>
+		</tr>
+		<tr>
+			<td colspan=2 align=center><input type=button value="Начать игру" onclick="createGame()"></td>
+		</tr>
+	</table>
+
+<h3>Старые игры</h3>
+<table id="games_table" border="1" width="600px" style="border:1px solid black;border-collapse:collapse">
+	<tr>
+		<th>Слово</th>
+		<th>Сложность</th>
+		<th>Дата</th>
+		<th>Кол-во слов</th>
+		<th>Закончено</th>
+		<th>Победа</th>
+		<th>Продолжить</th>
+	</tr>
+</table>
+<div id="cnt_pages"></div>
+</div>
+
+
+<br><br><br><br><br>
+</div>
+</html>

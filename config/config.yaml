@@ -1,0 +1,23 @@
+db-connection: Host=localhost;Port=5432;Database=;Username=;Password=
+
+services:
+
+  api:
+    url: http://localhost:5600
+
+  auth:
+    url: http://localhost:5601
+    parameters:
+        session-lifetime-minutes : 300
+        vk-client-id :
+        vk-client-secret :
+        vk-redirect-url :
+        google-client-id :
+        google-client-secret :
+        google-redirect-url :
+
+  users:
+    url: http://localhost:5602
+
+  game:
+    url: http://localhost:5603
