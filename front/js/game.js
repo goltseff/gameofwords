@@ -169,6 +169,7 @@ function doMove()
 			{
 				alert('Вы победили');
 				$('#move_table').hide();
+				window.location.reload();
 			}else{
 				htmlStr+='<tr>';
 				htmlStr+='<td>&nbsp;</td>';
