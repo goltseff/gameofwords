@@ -9,6 +9,9 @@ using Newtonsoft.Json;
 using gameofwords.common.Services;
 using System.Web;
 using gameofwords.common.config;
+using MassTransit;
+using gameofwords.auth.AuthContracts;
+using gameofwords.common.EventContracts;
 
 namespace gameofwords.auth.Services
 {
@@ -18,14 +21,15 @@ namespace gameofwords.auth.Services
         private readonly ISessionService _sessionService;
         private readonly PgDbContext _dbContext;
         private readonly IUsersService _users;
+        private readonly IPublishEndpoint _publishEndpoint;
 
-
-        public AuthService( ILogger logger, ISessionService sessionService, PgDbContext dbContext,IUsersService users )
+        public AuthService( ILogger logger, ISessionService sessionService, PgDbContext dbContext, IUsersService users, IPublishEndpoint publishEndpoint )
         {
             _logger = logger;
             _sessionService = sessionService;
             _dbContext = dbContext;
             _users = users;
+            _publishEndpoint=publishEndpoint;
         }
 
 
@@ -47,12 +51,16 @@ namespace gameofwords.auth.Services
                 if(userData.Password == pwdHash)
                 {
                     var sessionId = _sessionService.CreateSession( userData.Id, userData.IsAdmin );
+                    await NotifyAuthAttemptAsync( userData.Id, true );
                     return new LoginResponse( ) { Error=null, SessionId=sessionId.ToString( ) };
+                }
+                else
+                {
+                    await NotifyAuthAttemptAsync( userData.Id, false );
                 }
             }
             return new LoginResponse( ) { Error=new Error { Code=500, Message="wrong login or password" } };
         }
-
 
         public override async Task<SessionsListResponse> SessionsList( DataRequest request, ServerCallContext context )
         {
@@ -216,36 +224,18 @@ namespace gameofwords.auth.Services
         public override async Task<LoginResponse> BotLogin( IdRequest request, ServerCallContext context )
         {
             var sessionId = _sessionService.CreateSession( request.Id, false );
+            await NotifyAuthAttemptAsync( request.Id, true );
             return await Task.FromResult(new LoginResponse( ) { Error=null, SessionId=sessionId.ToString( ) });
         }
 
-        private class VkData
+        private async Task NotifyAuthAttemptAsync (int userId, bool isSuccess )
         {
-            public VKResponse[] Response { get; set; }
+            await _publishEndpoint.Publish( new AuthAttemptEvent
+            {
+                IsSuccess = isSuccess,
+                UserId = userId
+            } );
         }
-        private class VkAuth
-        {
-            public string access_token { get; set; }
-            public int expires_in { get; set; }
-            public int user_id { get; set; }
-        }
-        private class GoogleAuth
-        {
-            public string access_token { get; set; }
-            public string id_token { get; set; }
-        }
-        private class VKResponse
-        {
-            public long Id { get; set; }
-            public string first_name { get; set; }
-            public string last_name { get; set; }
-        }
-        private class GoogleData
-        {
-            public string id { get; set; }
-            public string name { get; set; }
-        }
-
 
     }
 }

@@ -57,7 +57,6 @@ namespace gameofwords.users.Services
             return new IdResponse( ) { Data = data };
         }
 
-
         public override async Task<UsersListResponse> GetUsersList( UsersListRequest request, ServerCallContext context )
         {
             var data = await (from u in _dbContext.Users
@@ -204,7 +203,6 @@ namespace gameofwords.users.Services
 
             return new BoolResponse( );
         }
-
 
         public override async Task<BoolResponse> DeleteUser( IdRequest request, ServerCallContext context )
         {

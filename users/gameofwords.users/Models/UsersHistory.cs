@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 
 namespace gameofwords.users.Models
 {
+    [Keyless]
     [Table( "users_history" )]
     public class UsersHistory
     {

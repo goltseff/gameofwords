@@ -14,20 +14,6 @@ namespace gameofwords.users.DataLayer
 
         public DbSet<Users> Users { get; set; }
         public DbSet<UsersHistory> UsersHistory { get; set; }
-
-        protected override void OnModelCreating( ModelBuilder modelBuilder )
-        {
-            base.OnModelCreating( modelBuilder );
-
-            try
-            {
-                modelBuilder.Entity<UsersHistory>( ).HasNoKey( );
-            }
-            catch(Exception)
-            {
-                throw;
-            }
-        }
-
+        public DbSet<UsersAuthAttempts> UsersAuthAttempts { get; set; }
     }
 }

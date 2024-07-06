@@ -1,5 +1,11 @@
 db-connection: Host=localhost;Port=5432;Database=;Username=;Password=
 
+rabbit-mq: 
+    host: "localhost"
+    username: "guest"
+    password: "guest"
+
+
 services:
 
   api:
